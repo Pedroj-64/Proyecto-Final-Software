@@ -1,0 +1,56 @@
+@if (pedido(); as p) {
+  <section class="pagina">
+    <h1 class="centrado">¡Califica tu experiencia!</h1>
+    <p class="texto-suave centrado">Pedido #{{ p.codigo }}</p>
+
+    @if (p.calificacion) {
+      <p class="aviso aviso-info">Ya calificaste este pedido. ¡Gracias! (RN-12)</p>
+    } @else {
+      <div class="tarjeta bloque">
+        <h3>{{ restaurante()?.nombre }}</h3>
+        <app-selector-estrellas
+          etiqueta="Calificación del restaurante"
+          [(valor)]="estrellasRestaurante"
+        />
+        <label class="campo">
+          <span class="visualmente-oculto">Comentario sobre la comida</span>
+          <input
+            placeholder="¿Qué te pareció la comida? (opcional)"
+            maxlength="200"
+            [ngModel]="comentarioRestaurante()"
+            (ngModelChange)="comentarioRestaurante.set($event)"
+          />
+        </label>
+      </div>
+
+      <div class="tarjeta bloque">
+        <h3>🛵 {{ repartidor()?.nombre }} (tu repartidor)</h3>
+        <app-selector-estrellas
+          etiqueta="Calificación del repartidor"
+          [(valor)]="estrellasRepartidor"
+        />
+        <label class="campo">
+          <span class="visualmente-oculto">Comentario sobre la entrega</span>
+          <input
+            placeholder="¿Cómo estuvo la entrega? (opcional)"
+            maxlength="200"
+            [ngModel]="comentarioRepartidor()"
+            (ngModelChange)="comentarioRepartidor.set($event)"
+          />
+        </label>
+      </div>
+
+      <app-errores-regla [errores]="errores()" />
+
+      <div class="accion-fija">
+        <button type="button" class="btn btn-accion btn-bloque" (click)="enviar()">
+          Enviar calificación
+        </button>
+      </div>
+    }
+  </section>
+} @else {
+  <app-estado-vacio icono="⭐" titulo="Pedido no encontrado">
+    <a class="btn btn-borde" routerLink="/cliente/pedidos">Ver mis pedidos</a>
+  </app-estado-vacio>
+}
