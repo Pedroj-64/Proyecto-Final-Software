@@ -1,0 +1,49 @@
+@if (pedido(); as p) {
+  <section class="pagina centrado-pagina">
+    @if (p.estado === 'CANCELADO') {
+      <h1>Pedido cancelado</h1>
+    } @else if (p.estado === 'ENTREGADO') {
+      <h1>¡Pedido entregado!</h1>
+    } @else {
+      <h1>¡Pedido confirmado!</h1>
+    }
+    <div class="ilustracion" aria-hidden="true">👨‍🍳🛵</div>
+    <p>
+      ID del pedido: <strong>#{{ p.codigo }}</strong>
+    </p>
+    <p class="texto-suave">
+      {{ restaurante()?.nombre }} · {{ p.creadoEn | date: 'd MMM y, h:mm a' }}
+      @if (repartidor(); as rep) {
+        <br />Repartidor: {{ rep.nombre }}
+      }
+    </p>
+    @if (p.estado !== 'CANCELADO') {
+      <div class="tarjeta"><app-seguimiento-pedido [estado]="p.estado" /></div>
+    }
+
+    <div class="tarjeta desglose izquierda">
+      @for (item of p.items; track $index) {
+        <span>{{ item.cantidad }}x {{ item.nombre }}</span
+        ><span>{{ totalItem(item) | cop }}</span>
+      }
+      <span class="total">Total pagado</span><span class="total">{{ p.costos.total | cop }}</span>
+    </div>
+
+    @if (p.estado === 'PENDIENTE') {
+      <p class="texto-suave">
+        Tu pedido está en camino a preparación. ¡Muchas gracias por tu compra!
+      </p>
+      <button type="button" class="btn btn-borde" (click)="cancelar()">Cancelar pedido</button>
+    }
+    @if (p.estado === 'ENTREGADO' && !p.calificacion) {
+      <a class="btn btn-accion" [routerLink]="['/cliente/pedidos', p.id, 'calificar']"
+        >Calificar experiencia</a
+      >
+    }
+    <a class="btn btn-borde" routerLink="/cliente/pedidos">Ver mis pedidos</a>
+  </section>
+} @else {
+  <app-estado-vacio icono="🧾" titulo="Pedido no encontrado">
+    <a class="btn btn-borde" routerLink="/cliente/pedidos">Ver mis pedidos</a>
+  </app-estado-vacio>
+}
