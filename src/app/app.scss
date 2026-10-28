@@ -1,0 +1,127 @@
+.marco {
+  max-width: var(--ancho-app);
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(0 0 0 / 10%);
+  position: relative;
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-marca);
+  color: #fff;
+}
+
+.marca {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+.usuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+  font-size: 0.85rem;
+
+  .rol {
+    font-size: 0.7rem;
+    opacity: 0.85;
+  }
+}
+
+.salir {
+  border: 1px solid rgb(255 255 255 / 60%);
+  background: transparent;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.contenido {
+  flex: 1;
+}
+
+.navegacion {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  background: var(--color-superficie);
+  border-top: 1px solid var(--color-borde);
+
+  a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0.5rem 0;
+    font-size: 0.75rem;
+    color: var(--color-texto-suave);
+    text-decoration: none;
+    position: relative;
+  }
+
+  a.activo {
+    color: var(--color-marca);
+    font-weight: 700;
+  }
+}
+
+.contador {
+  position: absolute;
+  top: 0.2rem;
+  right: calc(50% - 1.6rem);
+  background: var(--color-accion);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  padding: 0 0.35rem;
+}
+
+.toasts {
+  position: fixed;
+  bottom: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--ancho-app), 100%);
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.toast {
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  text-align: left;
+  color: #fff;
+  box-shadow: var(--sombra);
+  cursor: pointer;
+}
+
+.toast-exito {
+  background: var(--color-exito);
+}
+
+.toast-error {
+  background: var(--color-error);
+}
+
+.toast-info {
+  background: var(--color-texto);
+}

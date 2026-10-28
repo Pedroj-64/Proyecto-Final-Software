@@ -1,0 +1,335 @@
+/*
+ * Estilos globales de Urban Eats.
+ * Paleta tomada de las maquetas: naranja quemado (marca), rojo (acciones de compra)
+ * y fondo crema. Las clases utilitarias (.btn, .tarjeta, .campo, .chip) se
+ * reutilizan en todas las features para mantener la consistencia visual.
+ */
+
+:root {
+  --color-marca: #b5420f;
+  --color-marca-oscuro: #8f330b;
+  --color-accion: #e03a2f;
+  --color-accion-oscuro: #b92b22;
+  --color-fondo: #fbf4ea;
+  --color-superficie: #ffffff;
+  --color-borde: #ecdccb;
+  --color-texto: #2b1d14;
+  --color-texto-suave: #7a6656;
+  --color-exito: #2e9b4f;
+  --color-exito-fondo: #e4f5e9;
+  --color-error: #c62828;
+  --color-error-fondo: #fdecea;
+  --color-aviso-fondo: #fff4e0;
+  --radio: 14px;
+  --sombra: 0 2px 10px rgb(43 29 20 / 8%);
+  --ancho-app: 480px;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  color: var(--color-texto);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #efe3d3;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+p {
+  margin: 0 0 0.5rem;
+}
+
+a {
+  color: var(--color-marca);
+}
+
+.texto-suave {
+  color: var(--color-texto-suave);
+  font-size: 0.875rem;
+}
+
+.pagina {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.entre {
+  justify-content: space-between;
+}
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:focus-visible,
+.campo input:focus-visible,
+.campo select:focus-visible,
+.campo textarea:focus-visible {
+  outline: 3px solid #f3a77a;
+  outline-offset: 2px;
+}
+
+.btn-primario {
+  background: var(--color-marca);
+  color: #fff;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: var(--color-marca-oscuro);
+}
+
+.btn-accion {
+  background: var(--color-accion);
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.btn-accion:hover:not(:disabled) {
+  background: var(--color-accion-oscuro);
+}
+
+.btn-borde {
+  background: var(--color-superficie);
+  color: var(--color-marca);
+  border: 1.5px solid var(--color-marca);
+}
+
+.btn-suave {
+  background: var(--color-aviso-fondo);
+  color: var(--color-marca);
+  border: 1.5px dashed #f0b48f;
+}
+
+.btn-bloque {
+  width: 100%;
+}
+
+.btn-icono {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-borde);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-icono:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Tarjetas */
+.tarjeta {
+  background: var(--color-superficie);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 0.9rem;
+}
+
+.tarjeta-seleccionable {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  border: 1.5px solid var(--color-borde);
+  cursor: pointer;
+}
+
+.tarjeta-seleccionable[aria-pressed='true'],
+.tarjeta-seleccionable[aria-checked='true'] {
+  border-color: var(--color-marca);
+  background: #fdf0e6;
+}
+
+.miniatura {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fbe3cf, #f6c7a2);
+  font-size: 2rem;
+}
+
+/* Chips y estados */
+.chip {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--color-aviso-fondo);
+  color: var(--color-marca);
+}
+
+.chip-exito {
+  background: var(--color-exito-fondo);
+  color: var(--color-exito);
+}
+
+.chip-error {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+
+.chip-neutro {
+  background: #eee6dd;
+  color: var(--color-texto-suave);
+}
+
+/* Formularios */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-borde);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+}
+
+.campo input.ng-invalid.ng-touched,
+.campo select.ng-invalid.ng-touched,
+.campo textarea.ng-invalid.ng-touched {
+  border-color: var(--color-error);
+}
+
+.error-campo {
+  color: var(--color-error);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.aviso {
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.aviso-exito {
+  background: var(--color-exito-fondo);
+  color: var(--color-exito);
+}
+
+.aviso-error {
+  background: var(--color-error-fondo);
+  color: var(--color-error);
+}
+
+.aviso-info {
+  background: var(--color-aviso-fondo);
+  color: var(--color-marca-oscuro);
+}
+
+/* Tablas de costos */
+.desglose {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 1rem;
+  font-size: 0.9rem;
+}
+
+.desglose .total {
+  font-weight: 800;
+  font-size: 1rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--color-borde);
+}
+
+.descuento {
+  color: var(--color-error);
+}
+
+/* Barra fija inferior para la acción principal de cada pantalla */
+.accion-fija {
+  position: sticky;
+  bottom: 0;
+  padding: 0.75rem 0 0.25rem;
+  background: linear-gradient(to top, var(--color-fondo) 75%, transparent);
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.centrado {
+  text-align: center;
+}
