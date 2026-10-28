@@ -1,0 +1,61 @@
+<section class="pagina">
+  <div class="bienvenida">
+    <h1>Bienvenido a Urban Eats</h1>
+    <p class="texto-suave">
+      Elige un usuario de demostración para recorrer los procesos automatizados: pedir como cliente,
+      administrar el menú como restaurante o entregar como repartidor.
+    </p>
+  </div>
+
+  <h2>Clientes</h2>
+  @for (cliente of db.clientes(); track cliente.id) {
+    <button
+      type="button"
+      class="tarjeta tarjeta-seleccionable"
+      (click)="entrar('CLIENTE', cliente.id)"
+    >
+      <span class="miniatura" aria-hidden="true">🙋</span>
+      <span>
+        <strong>{{ cliente.nombre }}</strong
+        ><br />
+        <span class="texto-suave">{{ cliente.email }} · {{ cliente.direcciones[0].ciudad }}</span>
+      </span>
+    </button>
+  }
+
+  <h2>Restaurantes aliados</h2>
+  @for (restaurante of db.restaurantes(); track restaurante.id) {
+    <button
+      type="button"
+      class="tarjeta tarjeta-seleccionable"
+      (click)="entrar('RESTAURANTE', restaurante.id)"
+    >
+      <span class="miniatura" aria-hidden="true">{{ restaurante.emoji }}</span>
+      <span>
+        <strong>{{ restaurante.nombre }}</strong
+        ><br />
+        <span class="texto-suave">Administrador · {{ restaurante.ciudad }}</span>
+      </span>
+    </button>
+  }
+
+  <h2>Repartidores</h2>
+  @for (repartidor of db.repartidores(); track repartidor.id) {
+    <button
+      type="button"
+      class="tarjeta tarjeta-seleccionable"
+      (click)="entrar('REPARTIDOR', repartidor.id)"
+    >
+      <span class="miniatura" aria-hidden="true">🛵</span>
+      <span>
+        <strong>{{ repartidor.nombre }}</strong
+        ><br />
+        <span class="texto-suave">{{ repartidor.vehiculo }}</span>
+      </span>
+    </button>
+  }
+
+  <button type="button" class="btn btn-borde" (click)="restablecer()">
+    Restablecer datos de demostración
+  </button>
+</section>
