@@ -6,16 +6,16 @@
 
 export type Id = string;
 
-export type Ciudad = 'Armenia' | 'Bogota' | 'Pereira';
+export type Ciudad = 'Armenia' | 'Bogotá' | 'Pereira';
 
 export const CATEGORIAS = [
-    'Entradas',
-    'Sopas',
-    'Platos Fuertes',
-    'Acompañamientos',
-    'Hamburguesas',
-    'Bebidas',
-    'Postres',
+  'Entradas',
+  'Sopas',
+  'Platos Fuertes',
+  'Acompañamientos',
+  'Hamburguesas',
+  'Bebidas',
+  'Postres',
 ] as const;
 
 export type Categoria = (typeof CATEGORIAS)[number];
