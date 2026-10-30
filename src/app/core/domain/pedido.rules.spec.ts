@@ -1,5 +1,6 @@
 import { crearItem, crearProducto, crearRestaurante } from '../../../testing/fabricas';
 import {
+  esPedidoActivo,
   normalizarCodigo,
   puedeCancelar,
   puedeTransicionar,
@@ -129,6 +130,19 @@ describe('pedido.rules (RN-01 a RN-07)', () => {
       expect(puedeCancelar('PENDIENTE')).toBe(true);
       expect(puedeCancelar('ASIGNADO')).toBe(true);
       expect(puedeCancelar('EN_CAMINO')).toBe(false);
+    });
+  });
+
+  describe('esPedidoActivo', () => {
+    it('es activo mientras está pendiente, asignado o en camino', () => {
+      expect(esPedidoActivo({ estado: 'PENDIENTE' })).toBe(true);
+      expect(esPedidoActivo({ estado: 'ASIGNADO' })).toBe(true);
+      expect(esPedidoActivo({ estado: 'EN_CAMINO' })).toBe(true);
+    });
+
+    it('no es activo si está entregado o cancelado', () => {
+      expect(esPedidoActivo({ estado: 'ENTREGADO' })).toBe(false);
+      expect(esPedidoActivo({ estado: 'CANCELADO' })).toBe(false);
     });
   });
 

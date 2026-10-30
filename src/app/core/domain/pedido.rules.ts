@@ -4,6 +4,7 @@ import {
   EstadoPedido,
   ItemPedido,
   MetodoPago,
+  Pedido,
   Producto,
   Restaurante,
 } from '@core/models';
@@ -134,6 +135,11 @@ export function puedeTransicionar(desde: EstadoPedido, hacia: EstadoPedido): boo
 /** Un pedido solo se cancela mientras no ha salido a la calle. */
 export function puedeCancelar(estado: EstadoPedido): boolean {
   return puedeTransicionar(estado, 'CANCELADO');
+}
+
+/** Un pedido está en curso mientras no esté entregado ni cancelado (la usa RP-04 del catálogo). */
+export function esPedidoActivo(pedido: Pick<Pedido, 'estado'>): boolean {
+  return pedido.estado !== 'ENTREGADO' && pedido.estado !== 'CANCELADO';
 }
 
 /** Acepta "ue-102340", " UE102340 " o "102340" y devuelve "UE-102340". */
