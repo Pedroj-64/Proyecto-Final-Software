@@ -1,0 +1,132 @@
+<section class="pagina">
+  <div class="fila entre">
+    <div>
+      <h1>Catálogo de productos</h1>
+      <p class="texto-suave">
+        {{ resumen().total }} productos · {{ resumen().activos }} activos ·
+        {{ resumen().agotados }} agotados
+      </p>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <label class="campo">
+      <span class="visualmente-oculto">Buscar producto</span>
+      <input
+        type="search"
+        placeholder="Buscar producto..."
+        [ngModel]="busqueda()"
+        (ngModelChange)="filtrar($event, categoria())"
+      />
+    </label>
+    <label class="campo">
+      <span class="visualmente-oculto">Filtrar por categoría</span>
+      <select [ngModel]="categoria()" (ngModelChange)="filtrar(busqueda(), $event)">
+        <option value="">Todas</option>
+        @for (c of categorias; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @for (producto of paginaActual(); track producto.id) {
+    <article class="tarjeta producto">
+      <span class="miniatura" aria-hidden="true">{{ producto.emoji }}</span>
+      <div class="datos">
+        <h3>{{ producto.nombre }}</h3>
+        <p class="texto-suave">{{ producto.categoria }} · Stock {{ producto.stock }}</p>
+        <p class="fila">
+          <strong>{{ producto.precio | cop }}</strong>
+          <span class="chip" [class]="'chip ' + etiquetas[estado(producto)].clase">
+            {{ etiquetas[estado(producto)].texto }}
+          </span>
+        </p>
+      </div>
+      <div class="acciones">
+        <a
+          class="btn-icono"
+          [routerLink]="['/restaurante/productos', producto.id, 'editar']"
+          [attr.aria-label]="'Editar ' + producto.nombre"
+          >✏️</a
+        >
+        <button
+          type="button"
+          class="btn-icono"
+          [attr.aria-label]="(producto.visible ? 'Ocultar ' : 'Mostrar ') + producto.nombre"
+          (click)="alternarVisibilidad(producto)"
+        >
+          {{ producto.visible ? '👁️' : '🚫' }}
+        </button>
+        <button
+          type="button"
+          class="btn-icono"
+          [attr.aria-label]="'Eliminar ' + producto.nombre"
+          (click)="porEliminar.set(producto)"
+        >
+          🗑️
+        </button>
+      </div>
+    </article>
+  } @empty {
+    <app-estado-vacio
+      icono="📋"
+      titulo="No hay productos"
+      descripcion="Crea tu primer producto o cambia los filtros de búsqueda."
+    />
+  }
+
+  @if (totalPaginas() > 1) {
+    <nav class="fila entre paginacion" aria-label="Paginación">
+      <button
+        type="button"
+        class="btn btn-borde"
+        [disabled]="pagina() <= 1"
+        (click)="cambiarPagina(-1)"
+      >
+        Anterior
+      </button>
+      <span class="texto-suave">Página {{ pagina() }} de {{ totalPaginas() }}</span>
+      <button
+        type="button"
+        class="btn btn-borde"
+        [disabled]="pagina() >= totalPaginas()"
+        (click)="cambiarPagina(1)"
+      >
+        Siguiente
+      </button>
+    </nav>
+  }
+
+  <div class="accion-fija botones">
+    <a class="btn btn-primario btn-bloque" routerLink="/restaurante/productos/nuevo"
+      >+ Nuevo producto</a
+    >
+    <a class="btn btn-borde btn-bloque" routerLink="/restaurante/menu-actualizado">Publicar menú</a>
+  </div>
+</section>
+
+@if (porEliminar(); as producto) {
+  <div class="fondo-modal">
+    <div
+      class="tarjeta modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="titulo-eliminar"
+    >
+      <h3 id="titulo-eliminar">¿Eliminar "{{ producto.nombre }}"?</h3>
+      <p class="texto-suave">
+        Esta acción no se puede deshacer. Si solo quieres retirarlo temporalmente, ocúltalo del
+        menú.
+      </p>
+      <div class="fila entre">
+        <button type="button" class="btn btn-borde" (click)="porEliminar.set(null)">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-accion" (click)="confirmarEliminacion()">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+}
