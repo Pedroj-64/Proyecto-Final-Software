@@ -1,0 +1,67 @@
+.volver {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: var(--color-texto);
+}
+
+h1 {
+  margin: 0;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.emojis {
+  border: 1.5px dashed var(--color-borde);
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.6rem;
+  margin: 0;
+
+  legend {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0 0.3rem;
+  }
+}
+
+.opcion-emoji {
+  font-size: 1.5rem;
+  padding: 0.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  &.elegido {
+    border-color: var(--color-marca);
+    background: #fdf0e6;
+  }
+
+  &:focus-within {
+    outline: 3px solid #f3a77a;
+  }
+}
+
+.dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  input {
+    width: 2.6rem;
+    height: 1.4rem;
+    accent-color: var(--color-exito);
+  }
+}
