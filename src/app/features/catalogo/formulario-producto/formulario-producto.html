@@ -1,0 +1,93 @@
+<section class="pagina">
+  <div class="fila">
+    <a routerLink="/restaurante/catalogo" class="volver" aria-label="Volver al catálogo">←</a>
+    <h1>{{ editando() ? 'Editar producto' : 'Nuevo producto' }}</h1>
+  </div>
+
+  <form class="tarjeta formulario" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+    <fieldset class="emojis">
+      <legend>Imagen</legend>
+      @for (emoji of emojis; track emoji) {
+        <label class="opcion-emoji" [class.elegido]="formulario.controls.emoji.value === emoji">
+          <input type="radio" formControlName="emoji" [value]="emoji" class="visualmente-oculto" />
+          <span aria-hidden="true">{{ emoji }}</span>
+          <span class="visualmente-oculto">Imagen {{ emoji }}</span>
+        </label>
+      }
+    </fieldset>
+
+    <label class="campo">
+      Nombre
+      <input formControlName="nombre" placeholder="Ej. Ajiaco Santafereño" autocomplete="off" />
+      @if (campoInvalido('nombre')) {
+        <span class="error-campo"
+          >El nombre es obligatorio y debe tener entre 3 y 60 caracteres.</span
+        >
+      }
+    </label>
+
+    <label class="campo">
+      Descripción
+      <textarea
+        formControlName="descripcion"
+        rows="2"
+        placeholder="Ingredientes o detalles del plato"
+      ></textarea>
+      @if (campoInvalido('descripcion')) {
+        <span class="error-campo">Máximo 200 caracteres.</span>
+      }
+    </label>
+
+    <label class="campo">
+      Categoría
+      <select formControlName="categoria">
+        @for (c of categorias; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </label>
+
+    <div class="dos-columnas">
+      <label class="campo">
+        Precio (COP)
+        <input
+          type="number"
+          formControlName="precio"
+          [step]="reglas.MULTIPLO_PRECIO"
+          min="0"
+          inputmode="numeric"
+        />
+        @if (campoInvalido('precio')) {
+          <span class="error-campo">Ingresa un precio válido.</span>
+        }
+      </label>
+      <label class="campo">
+        Stock
+        <input
+          type="number"
+          formControlName="stock"
+          min="0"
+          [max]="reglas.STOCK_MAXIMO"
+          inputmode="numeric"
+        />
+        @if (campoInvalido('stock')) {
+          <span class="error-campo">Entre 0 y {{ reglas.STOCK_MAXIMO }}.</span>
+        }
+      </label>
+    </div>
+
+    <label class="interruptor">
+      <span>
+        <strong>Visible en el menú</strong><br />
+        <span class="texto-suave">{{
+          formulario.controls.visible.value ? 'Encendido' : 'Apagado'
+        }}</span>
+      </span>
+      <input type="checkbox" role="switch" formControlName="visible" />
+    </label>
+
+    <app-errores-regla [errores]="errores()" />
+
+    <button type="submit" class="btn btn-primario btn-bloque">Guardar cambios</button>
+  </form>
+</section>

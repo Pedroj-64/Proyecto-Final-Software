@@ -1,0 +1,53 @@
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.producto {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.datos {
+  flex: 1;
+  min-width: 0;
+
+  h3,
+  p {
+    margin: 0 0 0.15rem;
+  }
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  a {
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+  }
+}
+
+.botones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fondo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 20;
+}
+
+.modal {
+  max-width: 360px;
+}
