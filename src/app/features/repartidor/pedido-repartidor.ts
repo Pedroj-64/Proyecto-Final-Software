@@ -1,5 +1,6 @@
 import { Directive, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { calcularCambio } from '@core/domain/costos';
 import { ErrorRegla, Pedido, Resultado } from '@core/models';
 import { BaseDatosService } from '@core/services/base-datos.service';
 import { EntregaService } from '@core/services/entrega.service';
@@ -59,6 +60,20 @@ export abstract class PedidoRepartidor {
   protected readonly cliente = computed(() =>
     this.db.clientes().find((c) => c.id === this.pedido()?.clienteId),
   );
+
+  /** Pantalla que corresponde al estado actual del pedido (para "continuar"). */
+  protected readonly rutaActual = computed(() => {
+    const pedido = this.pedido();
+    return pedido ? rutaSegunEstado(pedido) : ['/repartidor/pedidos'];
+  });
+
+  /** RN-07: cambio que debe llevar el repartidor si el cliente paga en efectivo. */
+  protected readonly cambio = computed(() => {
+    const p = this.pedido();
+    return p?.metodoPago.tipo === 'EFECTIVO' && p.montoEfectivo !== null
+      ? calcularCambio(p.costos.total, p.montoEfectivo)
+      : null;
+  });
 
   /**
    * Muestra los errores si la acción falló; si funcionó, avisa y navega a `destino`

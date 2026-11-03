@@ -65,10 +65,10 @@
         }
         @case ('ASIGNADO') {
           <button type="button" class="btn btn-suave" (click)="rechazar()">Devolver pedido</button>
-          <a class="btn btn-accion" [routerLink]="continuar()">Ir a recoger</a>
+          <a class="btn btn-accion" [routerLink]="rutaActual()">Ir a recoger</a>
         }
         @case ('EN_CAMINO') {
-          <a class="btn btn-accion btn-bloque" [routerLink]="continuar()">Ver ruta de entrega</a>
+          <a class="btn btn-accion btn-bloque" [routerLink]="rutaActual()">Ver ruta de entrega</a>
         }
         @case ('ENTREGADO') {
           <p class="aviso aviso-exito">Pedido entregado. ¡Buen trabajo!</p>
