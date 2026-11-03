@@ -1,0 +1,46 @@
+<section class="pagina">
+  <h1>Pedidos recibidos</h1>
+  <div class="tarjeta fila entre">
+    <span>Total liquidado (entregados)</span>
+    <strong>{{ totalLiquidado() | cop }}</strong>
+  </div>
+
+  @for (pedido of pedidos(); track pedido.id) {
+    <article class="tarjeta pedido">
+      <div class="fila entre">
+        <strong>#{{ pedido.codigo }}</strong>
+        <span
+          class="chip"
+          [class.chip-exito]="pedido.estado === 'ENTREGADO'"
+          [class.chip-neutro]="pedido.estado === 'CANCELADO'"
+        >
+          {{ pedido.estado | estadoPedido }}
+        </span>
+      </div>
+      <p class="texto-suave">
+        {{ pedido.creadoEn | date: 'd MMM, h:mm a' }} · {{ pedido.direccion.linea }}
+      </p>
+      <ul class="items">
+        @for (item of pedido.items; track $index) {
+          <li>{{ item.cantidad }}x {{ item.nombre }}</li>
+        }
+      </ul>
+      <div class="fila entre">
+        <strong>{{ pedido.costos.total | cop }}</strong>
+        @if (pedido.estado === 'ENTREGADO') {
+          <a class="btn btn-borde" [routerLink]="['/restaurante/pedidos', pedido.id, 'liquidacion']"
+            >Ver liquidación</a
+          >
+        } @else if (pedido.estado === 'PENDIENTE') {
+          <button type="button" class="btn btn-borde" (click)="cancelar(pedido)">Cancelar</button>
+        }
+      </div>
+    </article>
+  } @empty {
+    <app-estado-vacio
+      icono="🧾"
+      titulo="Aún no hay pedidos"
+      descripcion="Cuando un cliente pida, lo verás aquí."
+    />
+  }
+</section>
