@@ -1,0 +1,88 @@
+@if (pedido(); as p) {
+  <section class="pagina">
+    <div class="fila entre">
+      <h1>Pedido #{{ p.codigo }}</h1>
+      <span class="chip chip-exito">Ganas {{ p.costos.envio | cop }}</span>
+    </div>
+
+    @if (p.estado !== 'PENDIENTE') {
+      <div class="tarjeta"><app-seguimiento-pedido [estado]="p.estado" /></div>
+    }
+
+    <div class="tarjeta bloque">
+      <h2>Recoger en</h2>
+      <strong>{{ restaurante()?.nombre }}</strong>
+      <span class="texto-suave">{{ restaurante()?.direccion }}, {{ restaurante()?.ciudad }}</span>
+    </div>
+
+    <div class="tarjeta bloque">
+      <h2>Entregar a</h2>
+      <strong>{{ cliente()?.nombre }}</strong>
+      <span>{{ p.direccion.linea }}, {{ p.direccion.ciudad }} ({{ p.direccion.etiqueta }})</span>
+      @if (p.repartidorId === repartidorId()) {
+        <span class="texto-suave">Teléfono: {{ cliente()?.telefono }}</span>
+      }
+    </div>
+
+    <div class="tarjeta desglose">
+      @for (item of p.items; track $index) {
+        <span
+          >{{ item.cantidad }}x {{ item.nombre }}
+          @if (item.notas) {
+            <br /><small class="texto-suave">Nota: {{ item.notas }}</small>
+          }
+        </span>
+        <span>{{ totalItem(item) | cop }}</span>
+      }
+      <span class="total">Total del pedido</span
+      ><span class="total">{{ p.costos.total | cop }}</span>
+    </div>
+
+    <div class="tarjeta bloque">
+      <h2>Pago</h2>
+      @if (p.metodoPago.tipo === 'EFECTIVO') {
+        <span
+          >Cobrar <strong>{{ p.costos.total | cop }}</strong> en efectivo.</span
+        >
+        @if (cambio() !== null) {
+          <span class="texto-suave"
+            >El cliente paga con {{ p.montoEfectivo | cop }}: lleva {{ cambio() | cop }} de
+            cambio.</span
+          >
+        }
+      } @else {
+        <span>Pagado en línea ({{ p.metodoPago.nombre }}). No debes cobrar.</span>
+      }
+    </div>
+
+    <app-errores-regla [errores]="errores()" />
+
+    <div class="accion-fija acciones">
+      @switch (p.estado) {
+        @case ('PENDIENTE') {
+          <button type="button" class="btn btn-suave" (click)="rechazar()">Rechazar</button>
+          <button type="button" class="btn btn-accion" (click)="aceptar()">Aceptar pedido</button>
+        }
+        @case ('ASIGNADO') {
+          <button type="button" class="btn btn-suave" (click)="rechazar()">Devolver pedido</button>
+          <a class="btn btn-accion" [routerLink]="continuar()">Ir a recoger</a>
+        }
+        @case ('EN_CAMINO') {
+          <a class="btn btn-accion btn-bloque" [routerLink]="continuar()">Ver ruta de entrega</a>
+        }
+        @case ('ENTREGADO') {
+          <p class="aviso aviso-exito">Pedido entregado. ¡Buen trabajo!</p>
+        }
+      }
+    </div>
+    <a class="btn btn-borde" routerLink="/repartidor/pedidos">Volver a pedidos</a>
+  </section>
+} @else {
+  <app-estado-vacio
+    icono="🛵"
+    titulo="Pedido no disponible"
+    descripcion="Puede que otro repartidor lo haya tomado o que lo hayas rechazado."
+  >
+    <a class="btn btn-borde" routerLink="/repartidor/pedidos">Volver a pedidos</a>
+  </app-estado-vacio>
+}
