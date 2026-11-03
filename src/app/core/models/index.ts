@@ -4,10 +4,13 @@
  * para mantener la trazabilidad modelo → prototipo → código.
  */
 
+/** Identificador de una entidad (cadena opaca). */
 export type Id = string;
 
+/** Ciudades con cobertura; la usa RN-05 para validar la entrega. */
 export type Ciudad = 'Armenia' | 'Bogotá' | 'Pereira';
 
+/** Categorías del menú de un restaurante. */
 export const CATEGORIAS = [
   'Entradas',
   'Sopas',
@@ -18,10 +21,13 @@ export const CATEGORIAS = [
   'Postres',
 ] as const;
 
+/** Categoría de un `Producto`. */
 export type Categoria = (typeof CATEGORIAS)[number];
 
+/** Rol del usuario demo; define las rutas a las que puede entrar. */
 export type Rol = 'CLIENTE' | 'RESTAURANTE' | 'REPARTIDOR';
 
+/** Restaurante aliado que ofrece productos y atiende pedidos en una ciudad. */
 export interface Restaurante {
   id: Id;
   nombre: string;
@@ -35,12 +41,14 @@ export interface Restaurante {
   emoji: string;
 }
 
+/** Adicional opcional de un `Producto` con costo extra (p. ej. "Doble carne"). */
 export interface OpcionProducto {
   id: Id;
   nombre: string;
   precioExtra: number;
 }
 
+/** Plato del menú. Se pide solo si está visible y con stock (RN-01); su precio es múltiplo de 50 (RP-02). */
 export interface Producto {
   id: Id;
   restauranteId: Id;
@@ -54,8 +62,10 @@ export interface Producto {
   opciones: OpcionProducto[];
 }
 
+/** Estado derivado de `visible` y `stock`; no se guarda (ver `estadoProducto`). */
 export type EstadoProducto = 'ACTIVO' | 'AGOTADO' | 'OCULTO';
 
+/** Dirección de entrega guardada por un `Cliente`. */
 export interface Direccion {
   id: Id;
   etiqueta: 'Casa' | 'Trabajo' | 'Otra';
@@ -63,8 +73,10 @@ export interface Direccion {
   ciudad: Ciudad;
 }
 
+/** Formas de pago aceptadas. */
 export type TipoMetodoPago = 'TARJETA' | 'EFECTIVO' | 'BILLETERA';
 
+/** Método de pago registrado por un `Cliente`. */
 export interface MetodoPago {
   id: Id;
   tipo: TipoMetodoPago;
@@ -72,6 +84,7 @@ export interface MetodoPago {
   detalle: string;
 }
 
+/** Quien realiza pedidos; guarda sus direcciones y métodos de pago. */
 export interface Cliente {
   id: Id;
   nombre: string;
@@ -81,6 +94,7 @@ export interface Cliente {
   metodosPago: MetodoPago[];
 }
 
+/** Quien recoge y entrega pedidos; solo puede tener uno activo (RN-09). */
 export interface Repartidor {
   id: Id;
   nombre: string;
@@ -88,8 +102,10 @@ export interface Repartidor {
   vehiculo: string;
 }
 
+/** Ciclo de vida del pedido; las transiciones válidas están en `pedido.rules.ts`. */
 export type EstadoPedido = 'PENDIENTE' | 'ASIGNADO' | 'EN_CAMINO' | 'ENTREGADO' | 'CANCELADO';
 
+/** Línea de un `Pedido`: copia del precio y nombre del producto al momento de pedir. */
 export interface ItemPedido {
   productoId: Id;
   nombre: string;
@@ -100,6 +116,7 @@ export interface ItemPedido {
   cantidad: number;
 }
 
+/** Costos del pedido (RN-06): total = subtotal + envío + impuestos. */
 export interface DesgloseCostos {
   subtotal: number;
   envio: number;
@@ -107,11 +124,13 @@ export interface DesgloseCostos {
   total: number;
 }
 
+/** Registro de una transición de estado en el historial del pedido. */
 export interface CambioEstado {
   estado: EstadoPedido;
   fecha: string;
 }
 
+/** Prueba de entrega: firma del cliente o foto si fue sin contacto (RN-11). */
 export interface EvidenciaEntrega {
   sinContacto: boolean;
   firma: string | null;
@@ -119,6 +138,7 @@ export interface EvidenciaEntrega {
   fecha: string;
 }
 
+/** Calificación de 1 a 5 estrellas al restaurante y al repartidor (RN-12). */
 export interface Calificacion {
   estrellasRestaurante: number;
   comentarioRestaurante: string;
@@ -127,6 +147,7 @@ export interface Calificacion {
   fecha: string;
 }
 
+/** Transacción principal: pedido de un cliente a un restaurante, con código único (RN-08). */
 export interface Pedido {
   id: Id;
   codigo: string;
@@ -146,6 +167,7 @@ export interface Pedido {
   calificacion: Calificacion | null;
 }
 
+/** Reparto del valor de un pedido entregado entre restaurante, plataforma y repartidor (RN-13). */
 export interface Liquidacion {
   pedidoCodigo: string;
   items: { nombre: string; cantidad: number; total: number }[];
@@ -162,7 +184,10 @@ export interface ErrorRegla {
   mensaje: string;
 }
 
+/** Resultado de una operación de negocio: el valor, o la lista de reglas violadas. */
 export type Resultado<T> = { ok: true; valor: T } | { ok: false; errores: ErrorRegla[] };
 
+/** Construye un `Resultado` exitoso. */
 export const exito = <T>(valor: T): Resultado<T> => ({ ok: true, valor });
+/** Construye un `Resultado` fallido con las reglas violadas. */
 export const fallo = <T>(errores: ErrorRegla[]): Resultado<T> => ({ ok: false, errores });

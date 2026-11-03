@@ -8,12 +8,14 @@ export function precioUnitarioConOpciones(
   return item.precioUnitario + item.opciones.reduce((acc, o) => acc + o.precioExtra, 0);
 }
 
+/** Total de una línea: precio unitario con opciones por cantidad. */
 export function totalItem(
   item: Pick<ItemPedido, 'precioUnitario' | 'opciones' | 'cantidad'>,
 ): number {
   return precioUnitarioConOpciones(item) * item.cantidad;
 }
 
+/** Suma de los totales de todas las líneas del pedido. */
 export function calcularSubtotal(items: readonly ItemPedido[]): number {
   return items.reduce((acc, item) => acc + totalItem(item), 0);
 }

@@ -1,7 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 
+/** Tipo visual de un aviso al usuario. */
 export type TipoNotificacion = 'exito' | 'error' | 'info';
 
+/** Aviso temporal mostrado en pantalla. */
 export interface Notificacion {
   id: number;
   tipo: TipoNotificacion;
