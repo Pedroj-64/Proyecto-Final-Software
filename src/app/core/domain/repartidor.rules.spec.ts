@@ -1,5 +1,6 @@
 import { EstadoPedido } from '@core/models';
 import {
+  estaDisponiblePara,
   tienePedidoActivo,
   validarAceptacion,
   validarCodigoRecogida,
@@ -26,21 +27,65 @@ describe('repartidor.rules (RN-09 a RN-11)', () => {
     });
   });
 
+  /** Pedido pendiente y libre; los cambios permiten simular los otros casos. */
+  const ofrecible = (
+    cambios: Partial<{
+      estado: EstadoPedido;
+      repartidorId: string | null;
+      repartidoresQueRechazaron: string[];
+    }> = {},
+  ) => ({
+    estado: 'PENDIENTE' as EstadoPedido,
+    repartidorId: null,
+    repartidoresQueRechazaron: [],
+    ...cambios,
+  });
+
+  describe('estaDisponiblePara', () => {
+    it('un pedido pendiente y sin repartidor está disponible', () => {
+      expect(estaDisponiblePara(ofrecible(), 'rp1')).toBe(true);
+    });
+
+    it('no lo está si ya tiene repartidor o dejó de estar pendiente', () => {
+      expect(
+        estaDisponiblePara(ofrecible({ estado: 'ASIGNADO', repartidorId: 'rp2' }), 'rp1'),
+      ).toBe(false);
+      expect(estaDisponiblePara(ofrecible({ estado: 'CANCELADO' }), 'rp1')).toBe(false);
+    });
+
+    it('no lo está para quien lo rechazó, pero sí para los demás', () => {
+      const rechazado = ofrecible({ repartidoresQueRechazaron: ['rp1'] });
+      expect(estaDisponiblePara(rechazado, 'rp1')).toBe(false);
+      expect(estaDisponiblePara(rechazado, 'rp2')).toBe(true);
+    });
+  });
+
   describe('validarAceptacion', () => {
-    it('acepta un pedido pendiente si el repartidor está libre', () => {
-      expect(validarAceptacion('rp1', { estado: 'PENDIENTE' }, [])).toEqual([]);
+    it('acepta un pedido disponible si el repartidor está libre', () => {
+      expect(validarAceptacion('rp1', ofrecible(), [])).toEqual([]);
     });
 
     it('RN-09: rechaza si el repartidor ya tiene un pedido activo', () => {
-      const errores = validarAceptacion('rp1', { estado: 'PENDIENTE' }, [
-        pedido('rp1', 'ASIGNADO'),
-      ]);
+      const errores = validarAceptacion('rp1', ofrecible(), [pedido('rp1', 'ASIGNADO')]);
       expect(errores.map((e) => e.regla)).toEqual(['RN-09']);
     });
 
     it('rechaza un pedido que ya no está pendiente', () => {
-      const errores = validarAceptacion('rp1', { estado: 'ASIGNADO' }, []);
+      const errores = validarAceptacion(
+        'rp1',
+        ofrecible({ estado: 'ASIGNADO', repartidorId: 'rp2' }),
+        [],
+      );
       expect(errores.map((e) => e.regla)).toEqual(['ESTADO']);
+    });
+
+    it('rechaza un pedido que el mismo repartidor ya rechazó', () => {
+      const errores = validarAceptacion(
+        'rp1',
+        ofrecible({ repartidoresQueRechazaron: ['rp1'] }),
+        [],
+      );
+      expect(errores).toEqual([{ regla: 'ESTADO', mensaje: 'Ya rechazaste este pedido.' }]);
     });
   });
 

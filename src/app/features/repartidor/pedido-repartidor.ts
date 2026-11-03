@@ -1,6 +1,7 @@
 import { Directive, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { calcularCambio } from '@core/domain/costos';
+import { estaDisponiblePara } from '@core/domain/repartidor.rules';
 import { ErrorRegla, Pedido, Resultado } from '@core/models';
 import { BaseDatosService } from '@core/services/base-datos.service';
 import { EntregaService } from '@core/services/entrega.service';
@@ -47,11 +48,7 @@ export abstract class PedidoRepartidor {
     const repartidorId = this.repartidorId();
     if (!pedido || !repartidorId) return undefined;
     if (pedido.repartidorId === repartidorId) return pedido;
-    const disponible =
-      pedido.estado === 'PENDIENTE' &&
-      pedido.repartidorId === null &&
-      !pedido.repartidoresQueRechazaron.includes(repartidorId);
-    return disponible ? pedido : undefined;
+    return estaDisponiblePara(pedido, repartidorId) ? pedido : undefined;
   });
 
   protected readonly restaurante = computed(() =>

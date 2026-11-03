@@ -91,10 +91,19 @@ describe('EntregaService (RN-09 a RN-11)', () => {
       expect(pedido('ped2').entrega?.foto).toBe('foto');
     });
 
-    it('otro repartidor no puede recoger ni entregar un pedido ajeno', () => {
+    it('otro repartidor no puede aceptar ni recoger un pedido ajeno', () => {
       servicio.aceptar('ped2', 'rp1');
       expect(servicio.confirmarRecogida('ped2', 'rp2', 'UE-102341').ok).toBe(false);
       expect(servicio.aceptar('ped2', 'rp2').ok).toBe(false);
+      expect(pedido('ped2').estado).toBe('ASIGNADO');
+    });
+
+    it('otro repartidor no puede entregar un pedido ajeno aunque tenga firma', () => {
+      enCamino('rp1');
+      const r = servicio.confirmarEntrega('ped2', 'rp2', firma);
+      expect(r.ok === false && r.errores[0].regla).toBe('ESTADO');
+      expect(pedido('ped2').estado).toBe('EN_CAMINO');
+      expect(pedido('ped2').entrega).toBeNull();
     });
   });
 
@@ -118,6 +127,21 @@ describe('EntregaService (RN-09 a RN-11)', () => {
       expect(p.historial.at(-1)?.estado).toBe('PENDIENTE');
       expect(servicio.activoDe('rp1')).toBeUndefined();
       expect(servicio.disponiblesPara('rp2').map((x) => x.id)).toEqual(['ped2']);
+    });
+
+    it('quien rechazó un pedido no puede aceptarlo después', () => {
+      servicio.rechazar('ped2', 'rp1');
+      const r = servicio.aceptar('ped2', 'rp1');
+      expect(r.ok === false && r.errores[0].mensaje).toBe('Ya rechazaste este pedido.');
+      expect(pedido('ped2').repartidorId).toBeNull();
+      expect(servicio.aceptar('ped2', 'rp2').ok).toBe(true);
+    });
+
+    it('quien devolvió un pedido aceptado tampoco puede volver a aceptarlo', () => {
+      servicio.aceptar('ped2', 'rp1');
+      servicio.rechazar('ped2', 'rp1');
+      expect(servicio.aceptar('ped2', 'rp1').ok).toBe(false);
+      expect(pedido('ped2').estado).toBe('PENDIENTE');
     });
 
     it('no rechaza uno aceptado por otro ni uno ya recogido', () => {

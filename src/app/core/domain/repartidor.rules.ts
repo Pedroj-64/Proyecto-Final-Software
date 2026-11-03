@@ -14,17 +14,32 @@ export function tienePedidoActivo(
   return pedidos.some((p) => p.repartidorId === repartidorId && esPedidoActivo(p));
 }
 
+/** Datos del pedido que deciden si se le puede ofrecer a un repartidor. */
+type PedidoOfrecible = Pick<Pedido, 'estado' | 'repartidorId' | 'repartidoresQueRechazaron'>;
+
+/** El pedido está pendiente, sin repartidor, y este repartidor no lo ha rechazado. */
+export function estaDisponiblePara(pedido: PedidoOfrecible, repartidorId: Id): boolean {
+  return (
+    pedido.estado === 'PENDIENTE' &&
+    pedido.repartidorId === null &&
+    !pedido.repartidoresQueRechazaron.includes(repartidorId)
+  );
+}
+
 /**
- * RN-09: un repartidor solo acepta un pedido pendiente y si no tiene otro activo.
+ * RN-09: un repartidor solo acepta un pedido disponible para él y si no tiene otro activo.
  * `pedidos` es la lista completa, para buscar el pedido activo del repartidor.
  */
 export function validarAceptacion(
   repartidorId: Id,
-  pedido: Pick<Pedido, 'estado'>,
+  pedido: PedidoOfrecible,
   pedidos: readonly Pick<Pedido, 'repartidorId' | 'estado'>[],
 ): ErrorRegla[] {
-  if (pedido.estado !== 'PENDIENTE') {
-    return [{ regla: 'ESTADO', mensaje: 'El pedido ya no está disponible.' }];
+  if (!estaDisponiblePara(pedido, repartidorId)) {
+    const mensaje = pedido.repartidoresQueRechazaron.includes(repartidorId)
+      ? 'Ya rechazaste este pedido.'
+      : 'El pedido ya no está disponible.';
+    return [{ regla: 'ESTADO', mensaje }];
   }
   if (tienePedidoActivo(repartidorId, pedidos)) {
     return [

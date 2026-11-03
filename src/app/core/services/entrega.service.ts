@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { EstadoPedido, EvidenciaEntrega, Id, Pedido, Resultado, exito, fallo } from '@core/models';
 import { esPedidoActivo, puedeTransicionar } from '@core/domain/pedido.rules';
 import {
+  estaDisponiblePara,
   validarAceptacion,
   validarCodigoRecogida,
   validarEvidenciaEntrega,
@@ -30,14 +31,7 @@ export class EntregaService {
 
   /** Pedidos pendientes, sin repartidor, que este repartidor no ha rechazado. */
   disponiblesPara(repartidorId: Id): Pedido[] {
-    return this.db
-      .pedidos()
-      .filter(
-        (p) =>
-          p.estado === 'PENDIENTE' &&
-          p.repartidorId === null &&
-          !p.repartidoresQueRechazaron.includes(repartidorId),
-      );
+    return this.db.pedidos().filter((p) => estaDisponiblePara(p, repartidorId));
   }
 
   /** RN-09: el único pedido asignado o en camino del repartidor, si lo tiene. */
