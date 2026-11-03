@@ -1,0 +1,49 @@
+<section class="pagina">
+  <h1>Pedidos disponibles</h1>
+
+  @if (activo(); as a) {
+    <div class="tarjeta activo">
+      <div class="fila entre">
+        <strong>Tu pedido activo: #{{ a.codigo }}</strong>
+        <span class="chip">{{ a.estado | estadoPedido }}</span>
+      </div>
+      <p class="texto-suave">Entrégalo antes de aceptar otro pedido (RN-09).</p>
+      <a class="btn btn-primario btn-bloque" [routerLink]="rutaActivo()">Continuar con el pedido</a>
+    </div>
+  }
+
+  <app-errores-regla [errores]="errores()" />
+
+  @for (p of disponibles(); track p.id) {
+    <article class="tarjeta pedido" [attr.aria-label]="'Pedido ' + p.codigo">
+      <div class="fila entre">
+        <strong>#{{ p.codigo }}</strong>
+        <span class="chip chip-exito">Ganas {{ p.costos.envio | cop }}</span>
+      </div>
+      <span
+        ><span aria-hidden="true">🏪</span> {{ restaurante(p.restauranteId)?.nombre }} ·
+        {{ restaurante(p.restauranteId)?.direccion }}</span
+      >
+      <span
+        ><span aria-hidden="true">📍</span> {{ p.direccion.linea }}, {{ p.direccion.ciudad }}</span
+      >
+      <span class="texto-suave">
+        {{ unidades(p) }} {{ unidades(p) === 1 ? 'producto' : 'productos' }} ·
+        {{ p.costos.total | cop }} ·
+        {{ p.metodoPago.tipo === 'EFECTIVO' ? 'Cobrar en efectivo' : 'Pagado en línea' }} ·
+        {{ p.creadoEn | date: 'h:mm a' }}
+      </span>
+      <div class="acciones">
+        <a class="btn btn-borde" [routerLink]="['/repartidor/pedidos', p.id]">Ver detalle</a>
+        <button type="button" class="btn btn-suave" (click)="rechazar(p)">Rechazar</button>
+        <button type="button" class="btn btn-primario" (click)="aceptar(p)">Aceptar</button>
+      </div>
+    </article>
+  } @empty {
+    <app-estado-vacio
+      icono="🛵"
+      titulo="No hay pedidos disponibles"
+      descripcion="Cuando un cliente haga un pedido aparecerá aquí."
+    />
+  }
+</section>

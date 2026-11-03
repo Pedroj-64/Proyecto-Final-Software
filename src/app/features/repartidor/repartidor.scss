@@ -1,0 +1,28 @@
+h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-texto-suave);
+  margin: 0;
+}
+
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.acciones .btn {
+  flex: 1 1 auto;
+}
+
+.acciones .aviso {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+}
