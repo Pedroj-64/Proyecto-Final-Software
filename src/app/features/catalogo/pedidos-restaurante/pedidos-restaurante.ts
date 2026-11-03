@@ -1,54 +1,48 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { calcularLiquidacion } from '@core/domain/liquidacion';
+import { Pedido } from '@core/models';
+import { NotificacionService } from '@core/services/notificacion.service';
 import { PedidoService } from '@core/services/pedido.service';
 import { SesionService } from '@core/services/sesion.service';
 import { EstadoVacio } from '@shared/components/estado-vacio';
 import { CopPipe } from '@shared/pipes/cop.pipe';
 import { EstadoPedidoPipe } from '@shared/pipes/estado-pedido.pipe';
 
-/** Pedidos recibidos por el restaurante; los entregados enlazan a su liquidación (RN-13). */
+/** Pedidos recibidos por el restaurante y acceso a su liquidación (proceso 4). */
 @Component({
   selector: 'app-pedidos-restaurante',
   imports: [RouterLink, DatePipe, CopPipe, EstadoPedidoPipe, EstadoVacio],
-  template: `
-    <section class="pagina">
-      <h1>Pedidos del restaurante</h1>
-      @for (p of pedidos(); track p.id) {
-        <article class="tarjeta">
-          <div class="fila entre">
-            <strong>#{{ p.codigo }}</strong>
-            <span class="chip" [class.chip-exito]="p.estado === 'ENTREGADO'">{{
-              p.estado | estadoPedido
-            }}</span>
-          </div>
-          <span class="texto-suave"
-            >{{ p.creadoEn | date: 'd MMM, h:mm a' }} · {{ p.items.length }} producto(s) ·
-            {{ p.costos.total | cop }}</span
-          >
-          @if (p.estado === 'ENTREGADO') {
-            <a [routerLink]="['/restaurante/pedidos', p.id, 'liquidacion']">Ver liquidación</a>
-          }
-        </article>
-      } @empty {
-        <app-estado-vacio
-          icono="🧾"
-          titulo="Aún no hay pedidos"
-          descripcion="Los pedidos de tus clientes aparecerán aquí."
-        />
-      }
-    </section>
-  `,
+  templateUrl: './pedidos-restaurante.html',
+  styleUrl: './pedidos-restaurante.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PedidosRestaurante {
-  private readonly servicio = inject(PedidoService);
+  private readonly pedidosService = inject(PedidoService);
   private readonly sesion = inject(SesionService);
+  private readonly notificaciones = inject(NotificacionService);
 
-  /** Del más reciente al más antiguo. */
   protected readonly pedidos = computed(() =>
-    [...this.servicio.delRestaurante(this.sesion.restaurante()?.id ?? '')].sort((a, b) =>
-      b.creadoEn.localeCompare(a.creadoEn),
-    ),
+    this.pedidosService.delRestaurante(this.sesion.restaurante()?.id ?? ''),
   );
+
+  /** Suma de lo que el restaurante recibe por los pedidos entregados. */
+  protected readonly totalLiquidado = computed(() =>
+    this.pedidos()
+      .filter((p) => p.estado === 'ENTREGADO')
+      .reduce((acc, p) => acc + calcularLiquidacion(p).totalRestaurante, 0),
+  );
+
+  protected cancelar(pedido: Pedido): void {
+    const resultado = this.pedidosService.cancelar(pedido.id);
+    if (resultado.ok) {
+      this.notificaciones.mostrar(
+        `Pedido ${pedido.codigo} cancelado. El stock fue devuelto.`,
+        'info',
+      );
+    } else {
+      this.notificaciones.mostrar(resultado.errores[0].mensaje, 'error');
+    }
+  }
 }
