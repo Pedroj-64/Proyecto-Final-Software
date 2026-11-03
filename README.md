@@ -70,7 +70,7 @@ Cada archivo tiene un solo dueño; las ramas salen de `master` y entran por pull
 | Brandon    | Transacción _Registrar Pedido_ (RN-01 a RN-08)                      |
 | María José | Repartidor y liquidación (RN-09 a RN-13)                            |
 
-Las pantallas y servicios de los demás están como esqueleto hasta que cada dueño fusiona su rama.
+Todas las pantallas de los tres roles están implementadas. La transacción *Registrar Pedido* (pantalla 1) recorre Restaurantes → Menú → Carrito → Dirección → Pago → Resumen; el CRUD de Producto (pantalla 2) está en el catálogo del restaurante.
 
 ## Demo y documentación
 

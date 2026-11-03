@@ -8,7 +8,9 @@
 export type Id = string;
 
 /** Ciudades con cobertura; la usa RN-05 para validar la entrega. */
-export type Ciudad = 'Armenia' | 'Bogotá' | 'Pereira';
+export const CIUDADES = ['Armenia', 'Bogotá', 'Pereira'] as const;
+
+export type Ciudad = (typeof CIUDADES)[number];
 
 /** Categorías del menú de un restaurante. */
 export const CATEGORIAS = [
