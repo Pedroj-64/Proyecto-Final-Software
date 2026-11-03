@@ -54,15 +54,17 @@ const IMAGEN_VACIA = 'data:,';
   styles: `
     .pad {
       position: relative;
+      overflow: hidden;
+      background: var(--color-superficie);
+      border: 2px dashed var(--color-borde);
+      border-radius: 0.75rem;
     }
+    /* Sin borde ni relleno: el área visible mantiene la proporción 3:1 del lienzo (600x200). */
     canvas {
       display: block;
       width: 100%;
       height: auto;
       aspect-ratio: 3 / 1;
-      background: var(--color-superficie);
-      border: 2px dashed var(--color-borde);
-      border-radius: 0.75rem;
       touch-action: none;
       cursor: crosshair;
     }
@@ -154,15 +156,19 @@ export class PadFirma {
     return url && url !== IMAGEN_VACIA ? url : null;
   }
 
-  /** Posición del puntero en coordenadas internas del canvas (que se escala con CSS). */
+  /**
+   * Posición del puntero en coordenadas internas del canvas (que se escala con CSS).
+   * Se mide el área de dibujo sin el borde: `getBoundingClientRect` sí lo incluye, así que se
+   * descuenta con `clientLeft`/`clientTop` y se escala con `clientWidth`/`clientHeight`.
+   */
   private punto(evento: PointerEvent): Punto {
     const canvas = this.lienzo().nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const escalaX = rect.width ? canvas.width / rect.width : 1;
-    const escalaY = rect.height ? canvas.height / rect.height : 1;
+    const escalaX = canvas.clientWidth ? canvas.width / canvas.clientWidth : 1;
+    const escalaY = canvas.clientHeight ? canvas.height / canvas.clientHeight : 1;
     return {
-      x: Math.round((evento.clientX - rect.left) * escalaX),
-      y: Math.round((evento.clientY - rect.top) * escalaY),
+      x: Math.round((evento.clientX - rect.left - canvas.clientLeft) * escalaX),
+      y: Math.round((evento.clientY - rect.top - canvas.clientTop) * escalaY),
     };
   }
 }

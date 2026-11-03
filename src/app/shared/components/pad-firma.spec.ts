@@ -76,6 +76,27 @@ describe('PadFirma', () => {
     expect(estado()).toBe('Firma registrada');
   });
 
+  it('traduce el puntero a coordenadas del lienzo descontando el borde y la escala', () => {
+    // jsdom no calcula diseño: se simula un canvas de 600x200 mostrado a 300x100 px,
+    // con su esquina en (100, 50) y un borde de 2 px alrededor.
+    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(100, 50, 304, 104), // incluye el borde
+    );
+    Object.defineProperties(canvas, {
+      clientLeft: { value: 2 },
+      clientTop: { value: 2 },
+      clientWidth: { value: 300 },
+      clientHeight: { value: 100 },
+    });
+
+    puntero('pointerdown', 102, 52); // esquina superior izquierda del área de dibujo
+    puntero('pointermove', 252, 102); // centro del área de dibujo
+    puntero('pointerup', 252, 102);
+
+    expect(ctx.moveTo).toHaveBeenCalledWith(0, 0);
+    expect(ctx.lineTo).toHaveBeenCalledWith(300, 100);
+  });
+
   it('un toque sin movimiento no cuenta como firma', () => {
     puntero('pointerdown', 10, 10);
     puntero('pointermove', 10, 10);
