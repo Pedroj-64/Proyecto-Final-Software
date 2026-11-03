@@ -1,0 +1,83 @@
+@if (pedido(); as p) {
+  <section class="pagina">
+    <h1>Confirmar entrega · #{{ p.codigo }}</h1>
+
+    @if (p.estado === 'EN_CAMINO') {
+      <div class="tarjeta bloque">
+        <h2>Entregar a</h2>
+        <strong>{{ cliente()?.nombre }}</strong>
+        <span>{{ p.direccion.linea }}, {{ p.direccion.ciudad }}</span>
+        @if (p.metodoPago.tipo === 'EFECTIVO') {
+          <span class="texto-suave">Recuerda cobrar {{ p.costos.total | cop }} en efectivo.</span>
+        }
+      </div>
+
+      <label class="tarjeta interruptor">
+        <input
+          type="checkbox"
+          role="switch"
+          [checked]="sinContacto()"
+          (change)="cambiarModo($event)"
+        />
+        <span>
+          <strong>Entrega sin contacto</strong><br />
+          <span class="texto-suave">Deja el pedido en la puerta y toma una foto.</span>
+        </span>
+      </label>
+
+      @if (sinContacto()) {
+        <div class="tarjeta bloque">
+          <h2>Foto de la entrega</h2>
+          @if (foto(); as url) {
+            <img class="foto" [src]="url" alt="Foto del pedido entregado" />
+            <button type="button" class="btn btn-borde" (click)="quitarFoto()">Quitar foto</button>
+          } @else {
+            <label class="btn btn-suave">
+              {{ procesandoFoto() ? 'Procesando foto…' : 'Tomar o elegir foto' }}
+              <input
+                class="visualmente-oculto"
+                type="file"
+                accept="image/*"
+                capture="environment"
+                [disabled]="procesandoFoto()"
+                (change)="elegirFoto($event)"
+              />
+            </label>
+          }
+          @if (errorFoto(); as mensaje) {
+            <p class="aviso aviso-error" role="alert">{{ mensaje }}</p>
+          }
+        </div>
+      } @else {
+        <div class="tarjeta bloque">
+          <h2>Firma del cliente</h2>
+          <app-pad-firma [(firma)]="firma" />
+        </div>
+      }
+
+      <app-errores-regla [errores]="errores()" />
+
+      <div class="accion-fija">
+        <button
+          type="button"
+          class="btn btn-accion btn-bloque"
+          [disabled]="procesandoFoto()"
+          (click)="confirmar()"
+        >
+          Confirmar entrega
+        </button>
+      </div>
+    } @else {
+      <p class="aviso aviso-info">Este pedido no está en camino.</p>
+      <a class="btn btn-primario" [routerLink]="rutaActual()">Ir al pedido</a>
+    }
+  </section>
+} @else {
+  <app-estado-vacio
+    icono="🛵"
+    titulo="Pedido no disponible"
+    descripcion="Este pedido no está asignado a ti."
+  >
+    <a class="btn btn-borde" routerLink="/repartidor/pedidos">Volver a pedidos</a>
+  </app-estado-vacio>
+}
