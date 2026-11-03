@@ -11,6 +11,7 @@ import { CopPipe } from '@shared/pipes/cop.pipe';
 
 const TAMANO_PAGINA = 6;
 
+/** Texto y estilo del chip de cada estado de producto. */
 export const ETIQUETAS_ESTADO_PRODUCTO: Record<EstadoProducto, { texto: string; clase: string }> = {
   ACTIVO: { texto: 'Activo', clase: 'chip-exito' },
   AGOTADO: { texto: 'Agotado', clase: 'chip-error' },

@@ -17,6 +17,7 @@ export function crearProducto(cambios: Partial<Producto> = {}): Producto {
   };
 }
 
+/** Crea un `ItemPedido` de prueba; `cambios` sobrescribe campos. */
 export function crearItem(cambios: Partial<ItemPedido> = {}): ItemPedido {
   return {
     productoId: 'p-test',
@@ -30,6 +31,7 @@ export function crearItem(cambios: Partial<ItemPedido> = {}): ItemPedido {
   };
 }
 
+/** Crea un `Restaurante` de prueba; `cambios` sobrescribe campos. */
 export function crearRestaurante(cambios: Partial<Restaurante> = {}): Restaurante {
   return {
     id: 'r1',

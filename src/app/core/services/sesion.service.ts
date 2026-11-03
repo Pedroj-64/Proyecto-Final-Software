@@ -3,6 +3,7 @@ import { Rol } from '@core/models';
 import { BaseDatosService } from './base-datos.service';
 import { StorageService } from './storage.service';
 
+/** Usuario demo que inició sesión. */
 export interface Sesion {
   rol: Rol;
   /** Id del cliente, restaurante o repartidor según el rol. */

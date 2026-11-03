@@ -7,6 +7,7 @@ import { routes } from './app.routes';
 
 registerLocaleData(localeEsCo);
 
+/** Configuración global: rutas por rol, parámetros de ruta como inputs y locale es-CO. */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),

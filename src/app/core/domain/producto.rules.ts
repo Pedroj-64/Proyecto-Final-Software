@@ -1,6 +1,7 @@
 import { CATEGORIAS, ErrorRegla, EstadoProducto, Producto } from '@core/models';
 import { REGLAS } from './reglas';
 
+/** Campos editables de un producto en el formulario del CRUD. */
 export type DatosProducto = Pick<
   Producto,
   'nombre' | 'descripcion' | 'categoria' | 'precio' | 'stock' | 'visible' | 'emoji'

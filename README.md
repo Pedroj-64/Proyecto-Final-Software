@@ -44,6 +44,21 @@ Datos de prueba (`src/app/core/data/seed.ts`): 3 restaurantes, 21 productos (act
 agotados y uno oculto), 3 clientes con 5 direcciones y 7 métodos de pago, 3 repartidores y
 2 pedidos históricos (uno entregado y uno pendiente). Se guardan en `localStorage`.
 
+## Estructura del código
+
+```
+src/app/
+├── core/
+│   ├── models/      Entidades del dominio (mismos nombres que el diagrama de clases)
+│   ├── domain/      Reglas de negocio como funciones puras (RN-01 a RN-13, RP-01 a RP-04)
+│   ├── services/    Casos de uso: Pedido, Producto, Entrega, Liquidación, Carrito...
+│   └── data/        Datos de prueba (seed)
+├── features/        Pantallas por rol: pedido (cliente), catalogo (restaurante), repartidor
+└── shared/          Componentes y pipes reutilizables
+```
+
+Cada servicio documenta el endpoint REST equivalente para la matriz de trazabilidad.
+
 ## Reparto del equipo
 
 Cada archivo tiene un solo dueño; las ramas salen de `master` y entran por pull request.
@@ -61,6 +76,7 @@ Las pantallas y servicios de los demás están como esqueleto hasta que cada due
 
 - Aplicación desplegada: https://pedroj-64.github.io/Proyecto-Final-Software/
 - Diagramas (dominio, secuencia, actividad, estados): https://pedroj-64.github.io/Proyecto-Final-Software/docs/
+- Visor interactivo de diagramas UML (clases, estados y secuencia): https://pedroj-64.github.io/UML-Rappi/
 - Requisitos, reglas, casos de uso y matriz de trazabilidad: [`docs/entregables.md`](docs/entregables.md)
 
 Cada push a `master` ejecuta el workflow `Deploy` (pruebas, build y publicación en GitHub Pages).

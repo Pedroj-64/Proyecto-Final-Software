@@ -64,6 +64,7 @@ const OPCIONES_BURGER = [
 ];
 const OPCIONES_BEBIDA = [extra('o10', 'Sin azúcar', 0), extra('o11', 'Tamaño grande', 2000)];
 
+/** Productos de prueba: activos, agotados y uno oculto, repartidos entre los 3 restaurantes. */
 export const PRODUCTOS: Producto[] = [
   // Sabor Colombiano (Armenia)
   {
@@ -323,6 +324,7 @@ export const PRODUCTOS: Producto[] = [
   },
 ];
 
+/** Clientes demo con direcciones y métodos de pago; cubren los casos de cobertura (RN-05). */
 export const CLIENTES: Cliente[] = [
   {
     id: 'c1',
@@ -372,6 +374,7 @@ export const CLIENTES: Cliente[] = [
   },
 ];
 
+/** Repartidores demo. */
 export const REPARTIDORES: Repartidor[] = [
   { id: 'rp1', nombre: 'Carlos Muñoz', telefono: '3201112233', vehiculo: 'Moto AKT 125' },
   { id: 'rp2', nombre: 'Diana Herrera', telefono: '3204445566', vehiculo: 'Bicicleta' },
