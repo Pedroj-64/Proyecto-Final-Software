@@ -34,6 +34,12 @@ export class ConfirmarEntrega extends PedidoRepartidor {
     this.errores.set([]);
   }
 
+  /** Nueva evidencia: los errores RN-11 de un intento anterior dejan de aplicar. */
+  protected cambiarFirma(firma: string | null): void {
+    this.firma.set(firma);
+    this.errores.set([]);
+  }
+
   protected async elegirFoto(evento: Event): Promise<void> {
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0];
@@ -44,6 +50,7 @@ export class ConfirmarEntrega extends PedidoRepartidor {
     this.errorFoto.set(null);
     try {
       this.foto.set(await crearMiniatura(archivo));
+      this.errores.set([]);
     } catch (error) {
       this.foto.set(null);
       this.errorFoto.set(error instanceof Error ? error.message : 'No se pudo usar la foto.');
@@ -54,6 +61,7 @@ export class ConfirmarEntrega extends PedidoRepartidor {
 
   protected quitarFoto(): void {
     this.foto.set(null);
+    this.errores.set([]);
   }
 
   protected confirmar(): void {

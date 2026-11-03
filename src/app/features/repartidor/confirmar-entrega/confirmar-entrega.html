@@ -51,7 +51,7 @@
       } @else {
         <div class="tarjeta bloque">
           <h2>Firma del cliente</h2>
-          <app-pad-firma [(firma)]="firma" />
+          <app-pad-firma [firma]="firma()" (firmaChange)="cambiarFirma($event)" />
         </div>
       }
 
