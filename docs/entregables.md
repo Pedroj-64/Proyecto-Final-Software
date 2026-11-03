@@ -98,7 +98,18 @@ Reglas posteriores a la entrega: RN-09 a RN-13 (repartidor, calificación, liqui
 | RF-07 | CU-01 | Estados | Pedidos disponibles, Recogida, Confirmar entrega | `EntregaService` |
 | RF-08 | CU-01 | Dominio | Liquidación, Calificación | `LiquidacionService` |
 
-## 5. Prueba de concepto
+## 5. Prototipo e implementación
+
+Los bocetos en papel (catálogo, formulario de producto, tomar pedido, dirección, resumen y recibo)
+se implementaron como pantallas Angular; las capturas están en `docs/img/app-*.png`.
+
+- **Pantalla 1 (transacción):** Restaurantes → Menú → Carrito → Dirección → Pago → Resumen y confirmación.
+  Muestra las reglas violadas (RN-04, RN-05, RN-07) y estados vacíos.
+- **Pantalla 2 (CRUD):** catálogo del restaurante con búsqueda, filtro y paginación; formulario de crear y
+  editar; ocultar; eliminar con confirmación (RP-01 a RP-04).
+- Diferencias frente al boceto: la imagen del producto es un emoji y el mapa de dirección es un enlace.
+
+## 6. Prueba de concepto
 
 Datos de prueba en `src/app/core/data/seed.ts`: 3 restaurantes, 21 productos, 3 clientes con
 5 direcciones y 7 métodos de pago, 3 repartidores y 2 pedidos históricos. Usuarios demo en el `README.md`.

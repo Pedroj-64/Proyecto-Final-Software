@@ -1,6 +1,6 @@
 .filtros {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 9rem);
   gap: 0.5rem;
 }
 

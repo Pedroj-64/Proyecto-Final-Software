@@ -8,6 +8,7 @@
   body{font:16px/1.5 system-ui,sans-serif;max-width:1000px;margin:0 auto;padding:16px;color:#222}
   img{max-width:100%;border:1px solid #ddd;border-radius:8px}
   nav a{margin-right:12px}
+  .fila{display:flex;gap:12px;flex-wrap:wrap}
   @media(prefers-color-scheme:dark){body{background:#111;color:#eee}img{background:#fff}a{color:#8ab4f8}}
 </style>
 </head>
@@ -18,5 +19,10 @@
 <h2>Secuencia · Registrar Pedido</h2><img src="img/secuencia-registrar-pedido.png" alt="Diagrama de secuencia">
 <h2>Actividad · Registrar Pedido</h2><img src="img/actividad-registrar-pedido.png" alt="Diagrama de actividad">
 <h2>Estados del pedido</h2><img src="img/estados-pedido.png" alt="Diagrama de estados">
+<h2>Pantalla 1 · Registrar Pedido (transacción)</h2>
+<p>Menú, carrito y resumen con la regla RN-05 violada (dirección fuera de cobertura).</p>
+<p class="fila"><img src="img/app-menu.png" alt="Menú del restaurante" width="30%"> <img src="img/app-carrito.png" alt="Carrito" width="30%"> <img src="img/app-resumen-error.png" alt="Resumen con error RN-05" width="30%"></p>
+<h2>Pantalla 2 · CRUD de Producto</h2>
+<p class="fila"><img src="img/app-crud-catalogo.png" alt="Catálogo de productos" width="30%"> <img src="img/app-crud-formulario.png" alt="Formulario de producto" width="30%"></p>
 </body>
 </html>
