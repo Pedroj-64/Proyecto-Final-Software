@@ -46,7 +46,7 @@ agotados y uno oculto), 3 clientes con 5 direcciones y 7 métodos de pago, 3 rep
 
 ## Reparto del equipo
 
-Cada archivo tiene un solo dueño; las ramas salen de `main` y entran por pull request.
+Cada archivo tiene un solo dueño; las ramas salen de `master` y entran por pull request.
 
 | Persona    | Parte                                                               |
 | ---------- | ------------------------------------------------------------------- |
@@ -56,3 +56,11 @@ Cada archivo tiene un solo dueño; las ramas salen de `main` y entran por pull r
 | María José | Repartidor y liquidación (RN-09 a RN-13)                            |
 
 Las pantallas y servicios de los demás están como esqueleto hasta que cada dueño fusiona su rama.
+
+## Demo y documentación
+
+- Aplicación desplegada: https://pedroj-64.github.io/Proyecto-Final-Software/
+- Diagramas (dominio, secuencia, actividad, estados): https://pedroj-64.github.io/Proyecto-Final-Software/docs/
+- Requisitos, reglas, casos de uso y matriz de trazabilidad: [`docs/entregables.md`](docs/entregables.md)
+
+Cada push a `master` ejecuta el workflow `Deploy` (pruebas, build y publicación en GitHub Pages).

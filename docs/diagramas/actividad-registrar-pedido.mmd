@@ -1,0 +1,13 @@
+flowchart LR
+    inicio((Inicio)) --> a1[Elige restaurante<br/>y agrega productos]
+    a1 --> d1{Visible, con stock<br/>y mismo restaurante?<br/>RN-01 a RN-03}
+    d1 -- No --> e1[Muestra la regla violada] --> a1
+    d1 -- Si --> a2[Elige direccion<br/>y metodo de pago]
+    a2 --> a3[Revisa resumen<br/>y costos RN-06]
+    a3 --> d3{Subtotal minimo,<br/>cobertura y efectivo<br/>RN-04, RN-05, RN-07}
+    d3 -- No --> e2[Muestra errores] --> a3
+    d3 -- Si --> f1[[Descuenta stock y crea<br/>pedido PENDIENTE RN-08]]
+    f1 --> d4{Cancela antes<br/>de salir?}
+    d4 -- Si --> a9[CANCELADO<br/>stock devuelto] --> fin
+    d4 -- No --> a10[Repartidor recoge y entrega<br/>RN-09 a RN-11]
+    a10 --> a11[ENTREGADO: liquidacion<br/>y calificacion RN-12, RN-13] --> fin(((Fin)))
