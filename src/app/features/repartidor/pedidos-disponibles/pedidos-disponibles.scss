@@ -1,0 +1,23 @@
+.activo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: 1.5px solid var(--color-marca);
+}
+
+.pedido {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.acciones .btn {
+  flex: 1 1 auto;
+}

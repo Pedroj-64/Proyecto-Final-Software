@@ -1,4 +1,4 @@
-import { DesgloseCostos, ItemPedido, Liquidacion, Pedido } from '@core/models';
+import { DesgloseCostos, ItemPedido } from '@core/models';
 import { REGLAS } from './reglas';
 
 /** Precio de una unidad incluyendo las opciones adicionales elegidas. */
@@ -32,24 +32,4 @@ export function calcularCostos(items: readonly ItemPedido[]): DesgloseCostos {
 /** RN-07: cambio a devolver cuando el cliente paga en efectivo. */
 export function calcularCambio(total: number, montoEfectivo: number): number {
   return Math.max(0, montoEfectivo - total);
-}
-
-/** RN-13: liquidación financiera del pedido para el restaurante y el repartidor. */
-export function calcularLiquidacion(pedido: Pedido): Liquidacion {
-  const subtotal = pedido.costos.subtotal;
-  const comision = Math.round(subtotal * REGLAS.TASA_COMISION_APP);
-  const ivaComision = Math.round(comision * REGLAS.TASA_IVA_COMISION);
-  return {
-    pedidoCodigo: pedido.codigo,
-    items: pedido.items.map((i) => ({
-      nombre: i.nombre,
-      cantidad: i.cantidad,
-      total: totalItem(i),
-    })),
-    subtotal,
-    comision,
-    ivaComision,
-    totalRestaurante: subtotal - comision - ivaComision,
-    pagoRepartidor: pedido.costos.envio,
-  };
 }

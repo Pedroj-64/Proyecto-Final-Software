@@ -1,0 +1,30 @@
+.interruptor {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.interruptor input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--color-marca);
+  flex: none;
+}
+
+.interruptor input:focus-visible {
+  outline: 3px solid #f3a77a;
+  outline-offset: 2px;
+}
+
+.btn:has(input:focus-visible) {
+  outline: 3px solid #f3a77a;
+  outline-offset: 2px;
+}
+
+.foto {
+  display: block;
+  max-width: 100%;
+  border-radius: 0.75rem;
+  border: 1.5px solid var(--color-borde);
+}

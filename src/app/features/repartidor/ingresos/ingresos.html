@@ -1,0 +1,36 @@
+<section class="pagina">
+  <h1>Mis ingresos</h1>
+
+  <div class="tarjeta resumen">
+    <span class="texto-suave">Total acumulado</span>
+    <strong class="total">{{ total() | cop }}</strong>
+    <span class="texto-suave"
+      >{{ entregas().length }} {{ entregas().length === 1 ? 'entrega' : 'entregas' }} · el envío de
+      cada pedido es para ti</span
+    >
+  </div>
+
+  @for (e of entregas(); track e.pedido.id) {
+    <article class="tarjeta entrega" [attr.aria-label]="'Entrega ' + e.pedido.codigo">
+      <div class="fila entre">
+        <strong>#{{ e.pedido.codigo }}</strong>
+        <strong class="pago">+{{ e.pago | cop }}</strong>
+      </div>
+      <span>{{ e.restaurante }} → {{ e.pedido.direccion.linea }}</span>
+      <div class="fila entre">
+        <span class="texto-suave">{{ e.fecha | date: 'd MMM y, h:mm a' }}</span>
+        <span class="chip chip-neutro">{{
+          e.pedido.entrega?.sinContacto ? '📷 Sin contacto' : '✍️ Con firma'
+        }}</span>
+      </div>
+    </article>
+  } @empty {
+    <app-estado-vacio
+      icono="💵"
+      titulo="Aún no tienes entregas"
+      descripcion="Cada pedido que entregues sumará aquí su valor de envío."
+    >
+      <a class="btn btn-primario" routerLink="/repartidor/pedidos">Ver pedidos disponibles</a>
+    </app-estado-vacio>
+  }
+</section>

@@ -1,0 +1,52 @@
+@if (pedido(); as p) {
+  <section class="pagina">
+    <h1>Confirmar recogida</h1>
+
+    @if (p.estado === 'ASIGNADO') {
+      <div class="tarjeta bloque">
+        <h2>Recoge en</h2>
+        <strong>{{ restaurante()?.nombre }}</strong>
+        <span class="texto-suave">{{ restaurante()?.direccion }}, {{ restaurante()?.ciudad }}</span>
+        <span class="texto-suave"
+          >{{ unidades() }} {{ unidades() === 1 ? 'producto' : 'productos' }} para
+          {{ cliente()?.nombre }}</span
+        >
+      </div>
+
+      <form class="tarjeta bloque" (ngSubmit)="confirmar()">
+        <label class="campo">
+          Código del pedido
+          <input
+            name="codigo"
+            autocomplete="off"
+            autocapitalize="characters"
+            placeholder="Ej.: UE-123456"
+            aria-describedby="ayuda-codigo"
+            [ngModel]="codigo()"
+            (ngModelChange)="codigo.set($event)"
+          />
+        </label>
+        <span id="ayuda-codigo" class="texto-suave">
+          Pídelo en el mostrador. Puedes escribirlo como UE-123456, ue123456 o 123456.
+        </span>
+
+        <app-errores-regla [errores]="errores()" />
+
+        <button type="submit" class="btn btn-accion btn-bloque">Confirmar recogida</button>
+      </form>
+    } @else {
+      <p class="aviso aviso-info">Este pedido no está esperando recogida.</p>
+      <a class="btn btn-primario" [routerLink]="rutaActual()">Ir al pedido</a>
+    }
+
+    <a class="btn btn-borde" [routerLink]="['/repartidor/pedidos', p.id]">Ver detalle del pedido</a>
+  </section>
+} @else {
+  <app-estado-vacio
+    icono="🛵"
+    titulo="Pedido no disponible"
+    descripcion="Este pedido no está asignado a ti."
+  >
+    <a class="btn btn-borde" routerLink="/repartidor/pedidos">Volver a pedidos</a>
+  </app-estado-vacio>
+}

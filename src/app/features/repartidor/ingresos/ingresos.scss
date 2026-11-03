@@ -1,0 +1,22 @@
+.resumen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.total {
+  font-size: 2rem;
+  color: var(--color-exito);
+}
+
+.entrega {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pago {
+  color: var(--color-exito);
+}

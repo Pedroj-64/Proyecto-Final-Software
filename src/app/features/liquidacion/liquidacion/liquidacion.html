@@ -1,0 +1,43 @@
+<section class="pagina">
+  @if (liquidacion(); as l) {
+    <h1>Liquidación · #{{ l.pedidoCodigo }}</h1>
+    <p class="texto-suave">
+      {{ sesion.restaurante()?.nombre }}
+      @if (fechaEntrega(); as fecha) {
+        · entregado el {{ fecha | date: 'd MMM y, h:mm a' }}
+      }
+    </p>
+
+    <div class="tarjeta desglose">
+      @for (item of l.items; track $index) {
+        <span>{{ item.cantidad }}x {{ item.nombre }}</span
+        ><span>{{ item.total | cop }}</span>
+      }
+    </div>
+
+    <div class="tarjeta desglose">
+      <span>Subtotal del pedido</span><span>{{ l.subtotal | cop }}</span>
+      <span>Comisión de la plataforma ({{ tasaComision }} %)</span
+      ><span class="descuento">{{ l.comision | cop: '-' }}</span>
+      <span>IVA sobre la comisión ({{ tasaIva }} %)</span
+      ><span class="descuento">{{ l.ivaComision | cop: '-' }}</span>
+      <span class="total">Total para el restaurante</span
+      ><span class="total">{{ l.totalRestaurante | cop }}</span>
+    </div>
+
+    <p class="aviso aviso-info">
+      El envío ({{ l.pagoRepartidor | cop }}) es el pago del repartidor y no se descuenta al
+      restaurante (RN-13).
+    </p>
+
+    <div class="accion-fija">
+      <button type="button" class="btn btn-accion btn-bloque" (click)="descargar()">
+        Descargar comprobante
+      </button>
+    </div>
+  } @else {
+    <h1>Liquidación</h1>
+    <app-errores-regla [errores]="errores()" />
+  }
+  <a class="btn btn-borde" routerLink="/restaurante/pedidos">Volver a pedidos</a>
+</section>

@@ -1,0 +1,62 @@
+@if (pedido(); as p) {
+  <section class="pagina">
+    <h1>En ruta · #{{ p.codigo }}</h1>
+    <div class="tarjeta"><app-seguimiento-pedido [estado]="p.estado" /></div>
+
+    @if (p.estado === 'EN_CAMINO') {
+      <div class="tarjeta bloque">
+        <h2>Destino</h2>
+        <strong>{{ p.direccion.linea }}</strong>
+        <span>{{ p.direccion.ciudad }} · {{ p.direccion.etiqueta }}</span>
+        @if (mapa(); as url) {
+          <a class="btn btn-borde" [href]="url" target="_blank" rel="noopener noreferrer"
+            >Abrir en el mapa <span aria-hidden="true">↗</span
+            ><span class="visualmente-oculto"> (se abre en una pestaña nueva)</span></a
+          >
+        }
+      </div>
+
+      <div class="tarjeta bloque">
+        <h2>Cliente</h2>
+        <strong>{{ cliente()?.nombre }}</strong>
+        <span
+          >Teléfono: <a [href]="'tel:' + cliente()?.telefono">{{ cliente()?.telefono }}</a></span
+        >
+      </div>
+
+      <div class="tarjeta bloque">
+        <h2>Cobro</h2>
+        @if (p.metodoPago.tipo === 'EFECTIVO') {
+          <span
+            >Cobra <strong>{{ p.costos.total | cop }}</strong> en efectivo.</span
+          >
+          @if (cambio() !== null) {
+            <span class="texto-suave"
+              >El cliente paga con {{ p.montoEfectivo | cop }}: entrega {{ cambio() | cop }} de
+              cambio.</span
+            >
+          }
+        } @else {
+          <span>Pagado en línea. No debes cobrar.</span>
+        }
+      </div>
+
+      <div class="accion-fija">
+        <a class="btn btn-accion btn-bloque" [routerLink]="['/repartidor/pedidos', p.id, 'entrega']"
+          >Confirmar entrega</a
+        >
+      </div>
+    } @else {
+      <p class="aviso aviso-info">Este pedido no está en camino.</p>
+      <a class="btn btn-primario" [routerLink]="rutaActual()">Ir al pedido</a>
+    }
+  </section>
+} @else {
+  <app-estado-vacio
+    icono="🛵"
+    titulo="Pedido no disponible"
+    descripcion="Este pedido no está asignado a ti."
+  >
+    <a class="btn btn-borde" routerLink="/repartidor/pedidos">Volver a pedidos</a>
+  </app-estado-vacio>
+}
