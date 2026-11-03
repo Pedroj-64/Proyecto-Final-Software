@@ -10,7 +10,8 @@
         <span>{{ p.direccion.ciudad }} · {{ p.direccion.etiqueta }}</span>
         @if (mapa(); as url) {
           <a class="btn btn-borde" [href]="url" target="_blank" rel="noopener noreferrer"
-            >Abrir en el mapa</a
+            >Abrir en el mapa <span aria-hidden="true">↗</span
+            ><span class="visualmente-oculto"> (se abre en una pestaña nueva)</span></a
           >
         }
       </div>
